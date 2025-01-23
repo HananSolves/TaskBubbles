@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Minimal scrollbar for WebKit browsers (Chrome, Safari) */
+.minimal-scrollbar::-webkit-scrollbar {
+  height: 8px; /* Height of the horizontal scrollbar */
+}
+
+.minimal-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #cbd5e0; /* Gray-400 */
+  border-radius: 4px;
+}
+
+.minimal-scrollbar::-webkit-scrollbar-track {
+  background-color: #f7fafc; /* Gray-50 */
+}
+
+/* Minimal scrollbar for Firefox */
+.minimal-scrollbar {
+  scrollbar-width: thin; /* Makes the scrollbar thinner */
+  scrollbar-color: #cbd5e0 #f7fafc; /* Thumb and track color */
+}

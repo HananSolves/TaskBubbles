@@ -5,33 +5,48 @@ interface Props {
   tasks: string[];
 }
 
-const List: React.FC<Props> = ({ category, tasks }) => {
-  const [checkedList, setCheckedList] = useState<boolean[]>(
-    new Array(tasks.length).fill(false)
+interface Task {
+  text: string;
+  checked: boolean;
+}
+
+const List: React.FC<Props> = ({ category, tasks: initialTasks }) => {
+  const [tasks, setTasks] = useState<Task[]>(
+    initialTasks.map((task) => ({ text: task, checked: false }))
   );
 
   const toggleCheck = (index: number) => {
-    const updatedCheckedList = [...checkedList];
-    updatedCheckedList[index] = !updatedCheckedList[index];
-    setCheckedList(updatedCheckedList);
+    const updatedTasks = [...tasks];
+
+    updatedTasks[index].checked = !updatedTasks[index].checked;
+
+    const [toggledTask] = updatedTasks.splice(index, 1);
+
+    if (toggledTask.checked) {
+      updatedTasks.push(toggledTask);
+    } else {
+      updatedTasks.unshift(toggledTask);
+    }
+
+    setTasks(updatedTasks);
   };
 
   return (
-    <div className='bg-gray-100 rounded-3xl min-w-[400px] p-4 mx-4 shadow-md flex flex-col  minimal-scrollbar'>
+    <div className='bg-gray-100 rounded-3xl min-w-[40%] p-4 mx-4 shadow-md flex flex-col'>
       <h2 className='font-bold text-2xl mb-4 text-gray-700'>{category}</h2>
-      <ul className='overflow-y-auto max-h-64'>
+      <ul className='overflow-y-auto max-h-64 minimal-scrollbar'>
         {tasks.map((task, index) => (
           <div
             key={index}
-            className='flex items-center p-2 hover:bg-gray-200 rounded-xl cursor-pointer transition-colors'
+            className='flex items-center p-2 hover:bg-gray-200 rounded-xl cursor-pointer transition-all duration-500 ease-in-out transform'
             onClick={() => toggleCheck(index)}
           >
             <div
               className={`w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center mr-3 transition-colors ${
-                checkedList[index] ? "bg-blue-500 border-blue-500" : ""
+                task.checked ? "bg-blue-500 border-blue-500" : ""
               }`}
             >
-              {checkedList[index] && (
+              {task.checked && (
                 <svg
                   className='w-3 h-3 text-white'
                   fill='none'
@@ -50,10 +65,10 @@ const List: React.FC<Props> = ({ category, tasks }) => {
             </div>
             <li
               className={`text-gray-700 ${
-                checkedList[index] ? "line-through opacity-50" : ""
+                task.checked ? "line-through opacity-50" : ""
               }`}
             >
-              {task}
+              {task.text}
             </li>
           </div>
         ))}

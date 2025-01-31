@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface Props {
   category: string;
-  tasks: string[];
+  receivedTasks: string[];
 }
 
 interface Task {
@@ -10,39 +10,36 @@ interface Task {
   checked: boolean;
 }
 
-const List: React.FC<Props> = ({ category, tasks: initialTasks }) => {
+const List: React.FC<Props> = ({ category, receivedTasks }) => {
   const [tasks, setTasks] = useState<Task[]>(
-    initialTasks.map((task) => ({ text: task, checked: false }))
+    receivedTasks.map((task) => ({ text: task, checked: false }))
   );
 
   const toggleCheck = (index: number) => {
     const updatedTasks = [...tasks];
-
     updatedTasks[index].checked = !updatedTasks[index].checked;
-
     const [toggledTask] = updatedTasks.splice(index, 1);
-
     if (toggledTask.checked) {
       updatedTasks.push(toggledTask);
     } else {
       updatedTasks.unshift(toggledTask);
     }
-
     setTasks(updatedTasks);
   };
 
   return (
-    <div className='bg-gray-100 rounded-3xl min-w-[40%] p-4 mx-4 shadow-md flex flex-col'>
-      <h2 className='font-bold text-2xl mb-4 text-gray-700'>{category}</h2>
-      <ul className='overflow-y-auto max-h-64 minimal-scrollbar'>
+    <div className='bg-slate-100 rounded-3xl shadow-md p-4 mx-2 min-w-[40vw]'>
+      <h1 className='font-bold text-2xl mb-3'>{category}</h1>
+      <div className='overflow-y-auto h-[40vh] minimal-scrollbar'>
         {tasks.map((task, index) => (
           <div
-            key={index}
-            className='flex items-center p-2 hover:bg-gray-200 rounded-xl cursor-pointer transition-all duration-500 ease-in-out transform'
-            onClick={() => toggleCheck(index)}
+            className='flex items-center p-2 hover:bg-gray-200 rounded-xl cursor-pointer active:cursor-grab'
+            onClick={() => {
+              toggleCheck(index);
+            }}
           >
             <div
-              className={`w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center mr-3 transition-colors ${
+              className={` w-5 h-5 rounded-full border-2 border-gray-400 flex items-center justify-center transition-colors mr-3 ${
                 task.checked ? "bg-blue-500 border-blue-500" : ""
               }`}
             >
@@ -64,7 +61,8 @@ const List: React.FC<Props> = ({ category, tasks: initialTasks }) => {
               )}
             </div>
             <li
-              className={`text-gray-700 ${
+              key={index}
+              className={`text-gray-700 list-none ${
                 task.checked ? "line-through opacity-50" : ""
               }`}
             >
@@ -72,7 +70,7 @@ const List: React.FC<Props> = ({ category, tasks: initialTasks }) => {
             </li>
           </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

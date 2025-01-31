@@ -52,7 +52,7 @@ const ListsContainer: React.FC = () => {
   return (
     <div className='flex overflow-x-auto bg-white max-w-[100%] shadow-2xl px-8 py-14 minimal-scrollbar'>
       {Object.entries(lists).map(([category, tasks]) => (
-        <List key={category} category={category} tasks={tasks} />
+        <List key={category} category={category} receivedTasks={tasks} />
       ))}
     </div>
   );
